@@ -1,4 +1,5 @@
 // page는 레이아웃을 가지고 틀을 짠다.
+// conponent들이 모여서 page를 이룬다.
 
 import React from 'react';
 import BasicLayout from '../layouts/BasicLayout';
