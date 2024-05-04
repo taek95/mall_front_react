@@ -1,3 +1,5 @@
+// 개발순서 : api 호출 -> 컴포넌트 만들고 -> 페이지에 붙이기
+
 // ajax : 비동기 통신 웹개발의 기법
 // axios : http 통신 가능하게 해주는 라이브러리
 
@@ -21,5 +23,10 @@ export const getList = async (pageParam) => {
     // params가 쿼리스트링이 된다.
     const res = await axios.get(`${prefix}/list`,{params:{page,size}})
     // res.data는 promise를 의미
+    return res.data
+}
+
+export const postAdd = async (todoObj) => {
+    const res = await axios.post(`${prefix}/`, todoObj)
     return res.data
 }

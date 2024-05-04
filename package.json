@@ -1,5 +1,5 @@
 {
-  "name": "mall",
+  "name": "mall_front",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -38,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "tailwindcss": "^3.4.3"
   }
 }
