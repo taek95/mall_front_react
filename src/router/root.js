@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react"
 import { createBrowserRouter } from "react-router-dom"
 import todoRouter from "./todoRouter"
+import productRouter from "./productRouter"
 
 const Loading = <div className={'bg-red-700'}>Loading..</div>
 
@@ -8,7 +9,7 @@ const Loading = <div className={'bg-red-700'}>Loading..</div>
 const Main = lazy(() => import("../pages/MainPage"))
 const About = lazy(() => import("../pages/AboutPage"))
 const TodoIndex = lazy(() => import("../pages/todo/IndexPage"))
-
+const ProductIndex = lazy(() => import("../pages/products/IndexPage"))
 
 // import시에 로딩 시간이 생김, suspense는 아직 렌더링이 준비되지 않은 컴포넌트가 있으면 로딩화면을 보여주고 준비되면 컴포넌트를 보여줌
 const root = createBrowserRouter([
@@ -27,6 +28,11 @@ const root = createBrowserRouter([
         // 이거 주석처리했다가 풀어주니 router작동하네 뭐지..
         children: todoRouter()
     },
+    {
+        path: "products",
+        element: <Suspense fallback={Loading}><ProductIndex/></Suspense>,
+        children: productRouter()
+    }
 ])
 
 export default root;

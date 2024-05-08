@@ -136,7 +136,8 @@ function ModifyComponent({tno}) {
             {res ?
             <ResultModal title={'처리결과'} content={res} callbackFn={closeModal}/>
             :
-            <></>}
+            <></>
+            }
         </div>
     );
 }
