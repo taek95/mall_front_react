@@ -21,10 +21,12 @@ const loginSlice = createSlice({
     initialState: loadMemberCookie() || initState,
     reducers: {
         // state : 기존의 상태, action: 처리하고 싶은 데이터(parameter)
+        // action.payload = 진짜 로그인 정보
         login: (state,action) => {
             console.log("login...........", action)
             // 다음에 이렇게 데이터를 유지해줘, next state
-            return {email: action.payload.email}
+            setCookie("member", JSON.stringify(action.payload), 1)
+            return action.payload
         },
         logout: () => {
             console.log("logout.........")
