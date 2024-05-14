@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 import { modifyMember } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../common/ResultModal'
+
 const initState = {
     email:'',
     pw: '',
     nickname:''
 }
+
 function ModifyComponent(props) {
     
     const [member, setMember] = useState(initState)

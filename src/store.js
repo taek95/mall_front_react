@@ -3,10 +3,12 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import loginSlice from "./slices/loginSlice";
+import cartSlice from "./slices/cartSlice";
 
 export default configureStore({
     // reducer : 금고지기
     reducer: {
-        "loginSlice": loginSlice
+        "loginSlice": loginSlice,
+        "cartSlice": cartSlice
     }
 })

@@ -3,6 +3,7 @@ import { getCookie, setCookie } from "./cookieUtil";
 import { API_SERVER_HOST } from "../api/todoApi";
 
 const jwtAxios = axios.create()
+
 const refreshJWT = async (accessToken, refreshToken) => {
     const host = API_SERVER_HOST
     const header = {headers:{'Authorization':`Bearer ${accessToken}`}}
