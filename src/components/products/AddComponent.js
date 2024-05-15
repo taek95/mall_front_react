@@ -4,6 +4,7 @@ import { postAdd } from '../../api/productsApi';
 import FetchingModal from '../common/FetchingModal';
 import ResultModal from '../common/ResultModal';
 import useCustomMove from '../../hooks/useCustomMove';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const initState = {
     pname:'',
@@ -19,12 +20,10 @@ function AddComponent(props) {
     
     // 업로드 처리하기 위함
     const uploadRef = useRef()
-
-    const [fetching, setFetching] = useState(false)
     
-    const [res, setRes] = useState(false)
-
     const {moveToList} = useCustomMove()
+
+    const addMutation = useMutation({mutationFn: (product) => postAdd(product)})
 
     const handleChangeProduct = (e) => {
         product[e.target.name] = e.target.value
@@ -45,22 +44,31 @@ function AddComponent(props) {
         formData.append("pdesc", product.pdesc)
         formData.append("price", product.price)
 
-        setFetching(true)
-
-        postAdd(formData).then(data => {
-            setFetching(false)
-            setRes(data.Result)
-        })
+        addMutation.mutate(formData)
 
     }
 
+    // 새 상품 등록 시, 가지고 있는 list 무효화하고 등록된 새 상품 추가해서 리스트 가져오기
+    const queryClient = useQueryClient()
+    
     const closeModal = () => {
-        setRes(null)
+        queryClient.invalidateQueries("products/list")
         moveToList({page:1})
     }
 
     return (
         <div className='border-2 border-sky-200 mt-10 m-2 p-4'>
+            
+            {addMutation.isPending ? <FetchingModal/> : <></>}
+            {addMutation.isSuccess ?
+                <ResultModal
+                    title={'Product Add Result'}
+                    content={`${addMutation.data.Result}번 등록 완료`}
+                    callbackFn={closeModal}/>
+                :
+                <></>
+            }
+
             <div className='flex justify-center'>
                 <div className='relative mb-4 flex w-full flex-wrap items-stretch'>
                     <div className='w-1/5 p-6 text-right font-bold'>Product Name</div>
@@ -118,13 +126,6 @@ function AddComponent(props) {
                     </button>
                 </div>
             </div>
-
-            {fetching ? <FetchingModal/> : <></>}
-            {res ? 
-                <ResultModal
-                    title={'Product Add Result'}
-                    content={`${res}번 상품 등록 완료`}
-                    callbackFn={closeModal} /> : <></>}
         </div>
     );
 }

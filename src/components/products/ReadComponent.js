@@ -5,6 +5,7 @@ import FetchingModal from '../common/FetchingModal';
 import useCustomMove from '../../hooks/useCustomMove';
 import useCustomCart from '../../hooks/useCustomCart';
 import useCustomLogin from '../../hooks/useCustomLogin';
+import { useQuery } from '@tanstack/react-query';
 
 
 const initState = {
@@ -19,20 +20,20 @@ const host = API_SERVER_HOST
 
 const ReadComponent = ({pno}) => {
 
-    const [product, setProduct] = useState(initState)
-    const [fetching, setFetching] = useState(false)
     const {moveToList, moveToModify , page, size} = useCustomMove()
     const {cartItems, changeCart} = useCustomCart()
     const {loginState} = useCustomLogin()
 
-    useEffect(() => {
-
-        setFetching(true)
-        getOne(pno).then(data => {
-            setProduct(data)
-            setFetching(false)
-        })
-    }, [pno]);
+    // react를 쓰는 멋있는 이유중 하나래, useState, useEffect 대신 깔끔하게 사용 가능
+    // v5 는 파라미터에 객체가 들어와야 한다.
+    const {data, isFetching} = useQuery({
+        // 식별자
+        queryKey: ['products', pno],
+        // 함수를 실행
+        queryFn: () => getOne(pno),
+        // stale : 상한, 신선하지 않은, -> 유통기한이 10초다, 10초가 지나서 조회하면 다시 서버 호출
+        staleTime: 1000 * 10
+    })
 
     const handleClickAddCart = () => {
         let qty = 1
@@ -47,9 +48,11 @@ const ReadComponent = ({pno}) => {
 
     }
 
+    const product = data || initState
+
     return (
         <div className="border-2 border-sky-200 mt-10 m-2 p-4">
-            {fetching ? <FetchingModal /> : <></>}
+            {isFetching ? <FetchingModal /> : <></>}
 
             <div className="flex justify-center mt-10">
                 <div className="relative mb-4 flex w-full flex-wrap items-stretch">
