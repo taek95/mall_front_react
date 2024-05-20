@@ -30,6 +30,7 @@ const IndexPage = () => {
         </div>
       </div>
       <div className="flex flex-wrap w-full">
+        {/* 하위 링크들은 이 부모 jsx 기반을 따른다. */}
         <Outlet/>
       </div>
     </BasicLayout>

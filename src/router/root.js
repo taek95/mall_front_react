@@ -6,7 +6,11 @@ import memberRouter from "./memberRouter"
 
 const Loading = <div className={'bg-red-700'}>Loading..</div>
 
-// 코드 스플리팅, lazy를 통해 dynamic import 실행, 하지만 이 컴포넌트는 단독으로 사용 불가
+// code splitting : 페이지가 /main, /about, /post 이렇게 세 가지 페이지로 이루어진 SPA를 개발한다고 할 때
+// 한번에 가져와놓고 안쓰면 로딩도 느리고 무겁고 부작용이 있다.
+// main으로 들어가는 동안 /about이나 /post 페이지 정보는 사용자에게 필요하지 않을 확률이 높다.
+// 해결방법 : lazy를 통해 dynamic import 실행
+
 const Main = lazy(() => import("../pages/MainPage"))
 const About = lazy(() => import("../pages/AboutPage"))
 const TodoIndex = lazy(() => import("../pages/todo/IndexPage"))
@@ -16,6 +20,7 @@ const ProductIndex = lazy(() => import("../pages/products/IndexPage"))
 const root = createBrowserRouter([
     {
         path: "",
+        // fallback : 대비책
         element: <Suspense fallback={Loading}><Main/></Suspense>
     },
     {
@@ -25,8 +30,8 @@ const root = createBrowserRouter([
     {
         path: "todo",
         element: <Suspense fallback={Loading}><TodoIndex/></Suspense>,
-        // outlet 적용, 경로는 상위에서 이어짐
-        // 이거 주석처리했다가 풀어주니 router작동하네 뭐지..
+        // outlet: 경로를 상위에서 이어지게 함
+        // 오류 : 주석처리했다가 풀어주니 router작동
         children: todoRouter()
     },
     {

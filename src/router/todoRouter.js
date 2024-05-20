@@ -11,6 +11,7 @@ const TodoModify = lazy(() => import("../pages/todo/ModifyPage"))
 const todoRouter = () => {
     return [
         {
+            // /list를 하면 절대경로로 찾아버린다.
             path: 'list',
             element: <Suspense fallback={Loading}><TodoList/></Suspense>
         },
